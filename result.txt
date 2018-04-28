@@ -1,0 +1,8 @@
+ practice1
+mysql> SELECT * FROM employee WHERE salary>6000 AND name LIKE'%n%';
++----+----------+-----+--------+-----------+--------+
+| id | name     | age | gender | companyId | salary |
++----+----------+-----+--------+-----------+--------+
+|  1 | xiaohong |  19 | female |         1 |   7000 |
++----+----------+-----+--------+-----------+--------+
+1 row in set (0.00 sec)
