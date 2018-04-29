@@ -1,0 +1,64 @@
+practice1:
+ 1.创建数据库employee_db
+ create databases employee_db;
+
+ 2.在数据库employee_db中创建table：`Employee`
+use employee_db;
+
+CREATE TABLE IF NOT EXISTS Employee(
+id INT UNSIGNED AUTO_INCREMENT,
+name VARCHAR(100) NOT NULL,
+age TINYINT NOT NULL,
+gender VARCHAR(40) NOT NULL,
+companyId TINYINT NOT NULL,
+salary MEDIUMINT NOT NULL,
+PRIMARY KEY ( id ) 
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+4.在数据库employee_db中创建table：`Company`
+
+CREATE TABLE IF NOT EXISTS Company(
+id INT UNSIGNED AUTO_INCREMENT,
+companyName VARCHAR(100) NOT NULL,
+employeesNumber INT NOT NULL,
+PRIMARY KEY ( id ) 
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+6.找出Employee表中姓名包含`n`字符并且薪资大于6000的雇员所有个人信息
+
+SELECT * FROM employee WHERE salary>6000 AND name LIKE'%n%';
+
+
+
+
+practice2:
+
+1.取得每个company中最高薪水的人员名字,输出结果包含公司名称和人员名称：
+
+SELECT p.companyName,result.name FROM(SELECT name, companyId FROM(select name,max(salary),companyId from employee GROUP BY companyId )as tmp)as result
+INNER JOIN company AS p
+ON result.companyId=p.id;
+
+practice3:
+
+1.取得平均薪水最高的公司,输出公司名称和平均薪水：companyName avgSalary
+
+SELECT companyName,rsalary.avgSalary FROM (SELECT id,MAX(tmp.avg) as avgSalary FROM(SELECT id, AVG(salary)AS avg from employee GROUP BY companyId) as tmp)AS rsalary
+INNER JOIN company AS p
+ON rsalary.id=p.id;
+
+practice4:
+
+1.找出薪水在公司的平均薪水之上的人员名字, 输出标准中包含Employee中所有字段和该employee所在公司名称以及该公司平均薪资：
+# id | name | age | gender | companyId | salary | companyName | avgsal
+
+select t1.*, t3.companyName,t2.avgsal
+from employee as t1 
+join  company as t3
+ON t1.companyId=t3.id
+join (select id, avg(salary) as avgsal from employee group by companyId) as t2
+   on t1.id=t2.id
+where t1.salary>t2.avgsal
+
+
+
